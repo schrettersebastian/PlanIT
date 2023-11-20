@@ -4,6 +4,7 @@ const port = 3001;
 const cors = require('cors');
 const mongoose = require('mongoose');
 const taskRoutes = require('./routes/task.routes');
+const projectRoutes = require('./routes/project.routes');
 
 app.use(cors());
 app.use(express.json()); 
@@ -24,11 +25,8 @@ db.once('open', function() {
   console.log("Connected successfully to MongoDB");
 });
 
-app.get('/test', (req, res) => {
-  res.json({ message: 'Hello from Backend' });
-});
-
-app.use('/api/tasks', taskRoutes); // Stellen Sie sicher, dass taskRoutes richtig definiert ist
+app.use('/api/tasks', taskRoutes); 
+app.use('/api/projects', projectRoutes);
 
 app.listen(port, () => {
   console.log(`Backend listening at http://localhost:${port}`);

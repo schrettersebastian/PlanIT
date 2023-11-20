@@ -1,19 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/task.model'); 
+const Project = require('../models/project.model'); // Fügen Sie diesen Import hinzu
+
 
 // CREATE: Eine neue Aufgabe erstellen
 router.post('/', async (req, res) => {
     try {
       const newTask = new Task(req.body);
       const savedTask = await newTask.save();
+  
+      // Aktualisieren Sie das Projekt, indem Sie die neue Aufgabe hinzufügen
+      if (savedTask.projectId) {
+        await Project.findByIdAndUpdate(savedTask.projectId, 
+          { $push: { tasks: savedTask._id } });
+      }
+  
       res.status(201).json(savedTask);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
   });
-  
-
 
 // READ: Alle Aufgaben abrufen
 router.get('/', async (req, res) => {
