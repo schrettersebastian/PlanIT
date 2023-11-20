@@ -1,0 +1,19 @@
+{
+  "name": "planit",
+  "version": "1.0.0",
+  "description": "planning tool for project management",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schrettersebastian/PlanIT.git"
+  },
+  "author": "Sebastian Schretter",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/schrettersebastian/PlanIT/issues"
+  },
+  "homepage": "https://github.com/schrettersebastian/PlanIT#readme"
+}
