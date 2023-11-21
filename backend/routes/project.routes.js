@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const Project = require('../models/project.model'); // Stellen Sie sicher, dass der Pfad korrekt ist
+const authenticate = require('../middlewares/authenticate');
 
 // CREATE: Ein neues Projekt erstellen
-router.post('/', async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
   try {
-    const newProject = new Project(req.body);
+    // Setzen der userId für das Projekt
+    const newProject = new Project({ ...req.body, userId: req.user._id });
     const savedProject = await newProject.save();
     res.status(201).json(savedProject);
   } catch (error) {
@@ -14,14 +16,15 @@ router.post('/', async (req, res) => {
 });
 
 // READ: Ein spezifisches Projekt anhand seiner ID abrufen
-router.get('/', async (req, res) => {
-    try {
-      const projects = await Project.find().populate('tasks');
-      res.json(projects);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  });
+router.get('/', authenticate, async (req, res) => {
+  try {
+    // Nur Projekte des authentifizierten Benutzers abfragen
+    const projects = await Project.find({ userId: req.user._id }).populate('tasks');
+    res.json(projects);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 // UPDATE: Ein Projekt aktualisieren
 router.put('/:id', async (req, res) => {

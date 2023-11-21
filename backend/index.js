@@ -5,9 +5,12 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const taskRoutes = require('./routes/task.routes');
 const projectRoutes = require('./routes/project.routes');
+const authRoutes = require('./routes/auth.routes');
 
 app.use(cors());
 app.use(express.json()); 
+app.use('/api/auth', authRoutes);
+
 
 app.use((req, res, next) => {
   console.log('Anfrage empfangen:', req.method, req.path);

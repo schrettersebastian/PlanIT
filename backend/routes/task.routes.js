@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/task.model'); 
-const Project = require('../models/project.model'); // Fügen Sie diesen Import hinzu
+const Project = require('../models/project.model');
+const authenticate = require('../middlewares/authenticate');
 
 
 // CREATE: Eine neue Aufgabe erstellen
-router.post('/', async (req, res) => {
-    try {
-      const newTask = new Task(req.body);
-      const savedTask = await newTask.save();
+router.post('/', authenticate, async (req, res) => {
+  try {
+    const newTask = new Task({ ...req.body, userId: req.user._id });
+    const savedTask = await newTask.save();
   
       // Aktualisieren Sie das Projekt, indem Sie die neue Aufgabe hinzufügen
       if (savedTask.projectId) {
